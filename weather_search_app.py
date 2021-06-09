@@ -40,10 +40,19 @@ def check_weather():
         z = result["weather"]
         weather_description = z[0]["description"]
 
-        print(f"Current temperature in {city_name}(in {country_official_name}) is {current_temperature_c}°C,\n the atmospheric pressure is {current_pressure} hPa,\n humidity {current_humidity} % and\n there are(is): {weather_description}.")
+        print(f"Current temperature in {city_name} ( in {country_official_name}) is {current_temperature_c}°C,\n the atmospheric pressure is {current_pressure} hPa,\n humidity {current_humidity} % and\n there are(is): {weather_description}.")
 
     else:
         print(f"Sorry but we didn't found {city_name} as a city name.")
 
 
 check_weather()
+
+"""
+input: 
+Enter city name : Brussels
+Current temperature in Brussels (in Kingdom of Belgium) is 25°C,
+ the atmospheric pressure is 1021 hPa,
+ humidity 44 % and
+ there are(is): clear sky.
+"""
