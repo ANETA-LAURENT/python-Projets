@@ -1,3 +1,14 @@
+"""
+Un programme pour chercher des recettes à partir d'ingrédients. Le projet de base utilise l’API de recettes (en anglais) Edamam,
+Note: comme l’API est en anglais, les ingrédients et recettes seront aussi en anglais.
+Notre algortihme vous propose 3 recettes contenant les ingrédients que vous avez choisis.Il est possible d'affiner sa recherche par:
+- le nombre maxium d'ingerdints utilisés dans la recette,
+- par type de repas: petit déjeuner, déjeuner, gouter, ou dinner,
+- mais aussi par  critère d'alimentation, ex: vegan, sans noix, sans oeuf, sans oléagineux, sans alcool, sans gluten...
+Les résultats de la recherche s'affichent automatiquement dans le navigateur internet et et dans le dossier txt.
+"""
+
+
 import requests
 import webbrowser
 import secrets
@@ -5,7 +16,7 @@ import secrets
 app_id = secrets.app_id
 app_key = secrets.app_key
 
-
+# Search functions
 def cherche_recette(ingredient, ingr):
     resultat = requests.get(
         "https://api.edamam.com/search?q={}&ingr={}&app_id={}&app_key={}".format(
@@ -93,11 +104,13 @@ def cherche_recette_healthy6(ingredient, ingr, mealType, choix1, choix2, choix3)
     data = resultat.json()
     return data["hits"]
 
-
+######### Main function of the program
 def run():
     print(
         "Bienvenue dans l'application qui permet de trouver une recette parfaite pour vous."
     )
+######### For loop to chose the number of ingredients
+
     chosen_nb = []
     stock = int(input("Combien d'ingredients minimum souhaitez-vous utiliser?: "))
     for i in range(stock):
@@ -106,15 +119,18 @@ def run():
         ingredient = ",".join(str(e) for e in chosen_nb)
 
     ingr = int(input("Combien des ingredients maximum voulez vous?: "))
+    
+    ######### Possibility of healthy option of the meal and thr type of the meal 
     mealType_question = input(
         "Voulez-vous choisir un type de repas ex. dinner? oui/non "
     )
     health_question = input("Voulez vous une recette healthy? oui/non ")
     with open("mycookbook.txt", "w") as fichier:
+        # the results are registered in txt file
         if mealType_question == "non" and health_question == "non":
 
             resultats = cherche_recette(ingredient, ingr)[:3]
-            i = 0
+            i = 0    #the results are classified with a list from 1 to 3 
             for resultat in resultats:
                 i += 1
                 recette = resultat["recipe"]
@@ -125,7 +141,7 @@ def run():
                 text = f"La recette {name} est prevue pour {nb_servings} personnes, elle contient en total {nb_ingrs} ingredients dont: {ingredient}. Vous la trouver sur cette page: {url} \n\n"
                 text_to_print = str(i) + ". " + text
                 fichier.write(text_to_print)
-                webbrowser.open_new(url)
+                webbrowser.open_new(url) #the results will be showed in a browser- 3 widows opened
 
         elif mealType_question == "oui" and health_question == "non":
             mealType = input(
